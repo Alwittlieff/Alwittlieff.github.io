@@ -1,0 +1,110 @@
+---
+title: "11.3 Final Project Step 3"
+author: "Alexa Wittlieff"
+date: "March 5th, 2022"
+output: 
+    pdf_document: default
+    word_document: default
+---
+
+
+# Introduction
+
+The film industry is an over forty billion dollar global industry. Each day families and friends bond while watching films together, whether at the movie theater or on the couch. Of these films being enjoyed by audiences of all backgrounds, certain movies stand out as truly timeless. The IMDB Movies Dataset on Kaggle captures key metrics for the top performing films that became classics. Performance measurements featured in the dataset include IMDB rating, meta score, and gross revenue. These measurements along with details about the film such as genre, run time, director, release year, and others allow us to gather insights from the data through careful analysis.
+
+# Problem Statement Addressed
+
+What constitutes a timeless movie that audiences love?
+
+# Process to Address Problem Statement
+
+In order to effectively address the problem statement, I leveraged The IMDB Movies Dataset (Shankhdhar 2021). Once the data was cleaned and the initial visualizations generated, I introduced a new variable titled "ranked movie performance" incorporating IMDB rating, meta score, and gross into one metric. Then using the newly created metric as the dependent variable, I was able to create a linear regression model for the investigation and identification of correlation with independent variables.
+
+# Analysis
+
+1. Create the new variable "movie performance"
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo=FALSE}
+setwd("C:/Users/Alexa/Documents/GitHub/Wittlieff_Winter2021_DSC520StatsforDS")
+```
+
+```{r include=FALSE}
+library('ggplot2')
+library('readxl')
+library('purrr')
+library('plyr')
+library('dplyr')
+library('magrittr')
+library('stringr')
+library('tidyverse')
+library('tidyr')
+```
+
+```{r echo = FALSE}
+imdb_df<- read.csv('imdb_top_1000.csv')
+```
+
+```{r echo = FALSE}
+cleanedIMDB_df <- imdb_df[, -c(1,8)]
+```
+
+```{r echo = FALSE}
+cleanedIMDB_df[967, "Released_Year"] = 1995
+```
+
+```{r echo =FALSE}
+cleanedIMDB_df$RuntimeMins <- as.numeric(str_replace(cleanedIMDB_df$Runtime, pattern = " min", ""))
+```
+
+```{r include= FALSE}
+typeof(cleanedIMDB_df$Gross)
+```
+
+```{r echo=FALSE}
+cleanedIMDB_df$GrossDollars <- as.numeric(cleanedIMDB_df$Gross)
+```
+
+
+```{r include=TRUE}
+IMDB_Rating_Rank <- rank(cleanedIMDB_df$IMDB_Rating, na.last = TRUE, ties.method = "average")
+Meta_score_Rank <- rank(cleanedIMDB_df$Meta_score, na.last = TRUE, ties.method = "average")
+Gross_Rank <- rank(cleanedIMDB_df$GrossDollars, na.last = TRUE, ties.method = "average")
+Ranked_Movie_Performance <- IMDB_Rating_Rank + Meta_score_Rank + Gross_Rank
+```
+
+2. Create Linear Regression Model
+
+```{r include = TRUE}
+performance_runtime_lm <- lm(Ranked_Movie_Performance ~ cleanedIMDB_df$RuntimeMins)
+```
+
+```{r include = TRUE}
+summary(performance_runtime_lm)
+```
+As a demonstration, I leveraged the model to predict ranked movie performance based on run time, which is the length of the film in minutes. The result was almost no correlation for the independent variable of run time.
+
+# Implications
+
+This linear model can be used to predict overall ranked movie performance using specific movie characteristics.  The process could be repeated for additional independent variables such as movie age based on release date, genre, and director. The goal would be to identify which independent variables produce statistically significant results per the summary() function in R Studio. 
+
+# Limitations
+
+Unfortunately, the model could not account for significant variability in the ranked movie performance values. Through the incorporation of additional movie characteristics, the model could become better fitted. Therefore, additional data analysis is required.
+
+# Concluding Remarks
+
+The data analysis conducted produced interesting visualizations to assist in uncovering trends and possible relationships in the IMDB movie data set. The linear regression model allows us to begin evaluating the strength 
+
+# Bibliography
+
+Bansal, S. (2021, September 27). Netflix movies and TV shows. Kaggle. Retrieved February 12, 2022, from https://www.kaggle.com/shivamb/netflix-shows 
+
+Kanawattanachai, P. (2019, January 18). Rotten Tomatoes top movies by genre - dataset by prasert. data.world. Retrieved February 12, 2022, from https://data.world/prasert/rotten-tomatoes-top-movies-by-genre 
+
+Shankhdhar, H. (2021, February 1). IMDB movies dataset. Kaggle. Retrieved February 12, 2022, from https://www.kaggle.com/harshitshankhdhar/imdb-dataset-of-top-1000-movies-and-tv-shows 
+
+
