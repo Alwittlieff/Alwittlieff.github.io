@@ -1,7 +1,6 @@
 ---
-title: "11.3 Final Project Step 3"
+title: "Linear Regression in R Studio"
 author: "Alexa Wittlieff"
-date: "March 5th, 2022"
 output: 
     pdf_document: default
     word_document: default

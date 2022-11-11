@@ -1,8 +1,5 @@
-# DSC 510
-# Week 11
-# Programming Assignment Week 11
+# API Pull in PyCharm
 # Author Alexa Wittlieff
-# 11/14/2021
 
 # Assignment Requirements
 #Must have a header and welcome message for the user.
