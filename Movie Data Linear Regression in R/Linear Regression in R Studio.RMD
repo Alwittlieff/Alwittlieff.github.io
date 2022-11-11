@@ -1,6 +1,6 @@
 ---
 title: "Linear Regression in R Studio"
-author: "Alexa Wittlieff"
+author: "Wittlieff, Alexa"
 output: 
     pdf_document: default
     word_document: default
